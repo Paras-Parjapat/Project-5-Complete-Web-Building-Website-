@@ -1,0 +1,1988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NovaForge — Premium Web Studio</title>
+
+    <!-- Tailwind + Lucide -->
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script src="https://unpkg.com/lucide@latest">
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        float: "float 6s ease-in-out infinite",
+                        glow: "glow 2s ease-in-out infinite",
+                        rise: "rise .6s ease-out",
+                        shimmer: "shimmer 2s linear infinite",
+                        "pulse-gentle": "pulse-gentle 3s ease-in-out infinite",
+                        "slide-up": "slide-up .4s ease-out",
+                        "fade-in": "fade-in .3s ease-out",
+                    },
+                    keyframes: {
+                        float: {
+                            "0%,100%": { transform: "translateY(0)" },
+                            "50%": { transform: "translateY(-14px)" },
+                        },
+                        glow: {
+                            "0%,100%": { boxShadow: "0 0 20px rgba(255,255,255,.08)" },
+                            "50%": { boxShadow: "0 0 45px rgba(255,255,255,.15)" },
+                        },
+                        rise: {
+                            from: { opacity: "0", transform: "translateY(25px)" },
+                            to: { opacity: "1", transform: "translateY(0)" },
+                        },
+                        shimmer: {
+                            from: { backgroundPosition: "200% 0" },
+                            to: { backgroundPosition: "-200% 0" },
+                        },
+                        "pulse-gentle": {
+                            "0%,100%": { opacity: "1" },
+                            "50%": { opacity: ".6" },
+                        },
+                        "slide-up": {
+                            from: { opacity: "0", transform: "translateY(20px) scale(.97)" },
+                            to: { opacity: "1", transform: "translateY(0) scale(1)" },
+                        },
+                        "fade-in": {
+                            from: { opacity: "0" },
+                            to: { opacity: "1" },
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+
+    <style>
+        /* ── reset & base ── */
+        * {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            color: #e5e7eb;
+            background: #000000;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(255, 255, 255, .03), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, .02), transparent 30%);
+        }
+
+        /* ── glass ── */
+        .glass {
+            background: rgba(18, 18, 24, .85);
+            border: 1px solid rgba(255, 255, 255, .05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-light {
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .04);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .glass-dark {
+            background: rgba(0, 0, 0, .6);
+            border: 1px solid rgba(255, 255, 255, .04);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, .02);
+            border: 1px solid rgba(255, 255, 255, .03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* ── grid background ── */
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .015) 1px, transparent 1px);
+            background-size: 42px 42px;
+        }
+
+        /* ── gradient text (subtle) ── */
+        .gradient {
+            background: linear-gradient(90deg, #9ca3af, #d1d5db, #f3f4f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .gradient-gold {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* ── modals ── */
+        .modal-bg {
+            background: rgba(0, 0, 0, .88);
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+        }
+        .hide {
+            display: none !important;
+        }
+
+        /* ── scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+        /* ── progress ── */
+        .progress-track {
+            background: rgba(255, 255, 255, .05);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            transition: width .7s ease, background .5s ease, box-shadow .5s ease;
+            border-radius: 999px;
+            height: 100%;
+        }
+
+        /* ── chat ── */
+        .chat-scroll {
+            scrollbar-width: thin;
+        }
+        .msg-owner {
+            background: linear-gradient(135deg, #374151, #4b5563);
+            border-radius: 18px 18px 4px 18px;
+        }
+        .msg-client {
+            background: rgba(255, 255, 255, .06);
+            border-radius: 18px 18px 18px 4px;
+        }
+        .msg-system {
+            background: rgba(255, 255, 255, .02);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, .04);
+        }
+
+        /* ── inputs ── */
+        .input {
+            width: 100%;
+            background: rgba(0, 0, 0, .5);
+            border: 1px solid rgba(255, 255, 255, .06);
+            outline: none;
+            border-radius: 14px;
+            padding: 13px 16px;
+            color: #e5e7eb;
+            transition: border-color .25s, box-shadow .25s;
+        }
+        .input:focus {
+            border-color: rgba(255, 255, 255, .2);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, .03);
+        }
+        .input::placeholder {
+            color: rgba(255, 255, 255, .2);
+        }
+        .input-dark {
+            background: rgba(0, 0, 0, .6);
+            border-color: rgba(255, 255, 255, .05);
+        }
+        .input-dark:focus {
+            border-color: rgba(255, 255, 255, .15);
+        }
+
+        select.input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,.3)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 40px;
+            color: #e5e7eb;
+        }
+        select.input option {
+            background: #0a0a0a;
+            color: #e5e7eb;
+        }
+
+        /* ── toast ── */
+        #toastContainer {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 380px;
+            width: calc(100vw - 40px);
+            pointer-events: none;
+        }
+        #toastContainer>* {
+            pointer-events: auto;
+        }
+        .toast {
+            padding: 14px 20px;
+            border-radius: 16px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(10, 10, 14, .94);
+            border: 1px solid rgba(255, 255, 255, .06);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .8);
+            animation: slide-up .3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .toast-success {
+            border-left: 3px solid #22c55e;
+        }
+        .toast-error {
+            border-left: 3px solid #ef4444;
+        }
+        .toast-info {
+            border-left: 3px solid #6b7280;
+        }
+        .toast-warning {
+            border-left: 3px solid #f59e0b;
+        }
+
+        /* ── typing ── */
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            padding: 6px 0;
+        }
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .3);
+            animation: typingBounce 1.4s infinite both;
+        }
+        .typing-dots span:nth-child(2) {
+            animation-delay: .2s;
+        }
+        .typing-dots span:nth-child(3) {
+            animation-delay: .4s;
+        }
+        @keyframes typingBounce {
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: .3;
+            }
+            30% {
+                transform: translateY(-8px);
+                opacity: 1;
+            }
+        }
+
+        /* ── chat pulse ── */
+        #chatButton {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, .1);
+            animation: chatPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes chatPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, .1);
+            }
+            50% {
+                box-shadow: 0 0 0 14px rgba(255, 255, 255, 0);
+            }
+        }
+
+        /* ── owner account wrapper ── */
+        .owner-account-wrapper {
+            position: relative;
+            z-index: 100;
+        }
+        .owner-account-wrapper .owner-menu-dropdown {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            z-index: 200;
+            min-width: 220px;
+            background: rgba(10, 10, 14, .96);
+            border: 1px solid rgba(255, 255, 255, .05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .8);
+        }
+        .owner-account-wrapper .owner-menu-dropdown.hide {
+            display: none !important;
+        }
+
+        /* ── portal header ── */
+        .portal-header {
+            position: relative;
+            z-index: 50;
+        }
+
+        /* ── hover lift ── */
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .4);
+        }
+        .shadow-glow {
+            box-shadow: 0 0 40px rgba(255, 255, 255, .02);
+        }
+
+        /* ── client stats ── */
+        .client-stat {
+            background: rgba(255, 255, 255, .02);
+            border: 1px solid rgba(255, 255, 255, .04);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+        .client-stat .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f3f4f6;
+        }
+        .client-stat .label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* ── responsiveness ── */
+        @media (max-width: 640px) {
+            .glass {
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+            }
+            #toastContainer {
+                bottom: 80px;
+                right: 10px;
+                max-width: calc(100vw - 20px);
+            }
+            .owner-account-wrapper .owner-menu-dropdown {
+                right: 0;
+                left: auto;
+                min-width: 180px;
+            }
+        }
+
+        /* ── portal container ── */
+        .portal-container {
+            background: #000000;
+            min-height: 100vh;
+        }
+
+        /* ── order list scroll ── */
+        .order-list-scroll {
+            max-height: calc(100vh - 320px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        .order-list-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .order-list-scroll::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 20px;
+        }
+
+        /* ── buttons ── */
+        .btn-primary {
+            background: #1f2937;
+            border: 1px solid rgba(255, 255, 255, .08);
+            color: #f3f4f6;
+            transition: background .2s, transform .1s;
+        }
+        .btn-primary:hover {
+            background: #374151;
+        }
+        .btn-primary:active {
+            transform: scale(.97);
+        }
+        .btn-accent {
+            background: #374151;
+            border: 1px solid rgba(255, 255, 255, .1);
+            color: #fff;
+            transition: background .2s, transform .1s;
+        }
+        .btn-accent:hover {
+            background: #4b5563;
+        }
+        .btn-accent:active {
+            transform: scale(.97);
+        }
+        .btn-success {
+            background: #16a34a;
+            color: #000;
+            font-weight: 600;
+        }
+        .btn-success:hover {
+            background: #22c55e;
+        }
+
+        /* ── toggle sign-up / login ── */
+        .auth-toggle {
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color .2s;
+        }
+        .auth-toggle:hover {
+            color: #f3f4f6;
+        }
+
+        /* ── view toggle active state ── */
+        .view-btn-active {
+            background: rgba(255, 255, 255, .08);
+            border-color: rgba(255, 255, 255, .15);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toastContainer"></div>
+
+    <!-- ─── NAVBAR ─── -->
+    <header class="fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 pt-4">
+            <nav class="glass rounded-2xl px-5 py-4 flex items-center justify-between shadow-glow border border-white/5">
+
+                <a href="#home" class="flex items-center gap-3 no-underline">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center shadow-lg shadow-white/5">
+                        <i data-lucide="layers" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-black text-lg tracking-tight text-white">
+                            Nova<span class="text-gray-400">Forge</span>
+                        </div>
+                        <div class="text-[9px] text-gray-600 tracking-[.3em] uppercase">
+                            Digital Studio
+                        </div>
+                    </div>
+                </a>
+
+                <div class="hidden lg:flex gap-8 text-sm text-gray-500 font-medium">
+                    <a href="#home" class="hover:text-white transition">Home</a>
+                    <a href="#services" class="hover:text-white transition">Services</a>
+                    <a href="#pricing" class="hover:text-white transition">Pricing</a>
+                    <a href="#process" class="hover:text-white transition">Process</a>
+                    <a href="#contact" class="hover:text-white transition">Contact</a>
+                </div>
+
+                <div class="flex gap-2 items-center">
+                    <!-- Client area: shown when logged in -->
+                    <div id="clientNavInfo" class="hidden sm:flex items-center gap-3">
+                        <span id="clientGreeting" class="text-sm text-gray-300"></span>
+                        <!-- NEW: My Orders button -->
+                        <button onclick="openClientOrders()" class="text-sm text-gray-300 hover:text-white transition flex items-center gap-1">
+                            <i data-lucide="list-ordered" class="w-4"></i>
+                            My Orders
+                        </button>
+                        <button onclick="clientLogoutFromNav()" class="text-sm text-gray-500 hover:text-white transition">
+                            Logout
+                        </button>
+                    </div>
+                    <!-- Client login button (hidden when logged in) -->
+                    <button id="clientNavBtn" onclick="openClientLogin()" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl glass-light hover:bg-white/10 transition text-sm text-gray-300">
+                        <i data-lucide="user" class="w-4"></i>
+                        Client
+                    </button>
+                    <!-- Owner button always visible -->
+                    <button onclick="openOwnerLogin()" class="px-4 py-2 rounded-xl bg-white text-black font-bold hover:scale-105 transition shadow-lg shadow-white/10 text-sm">
+                        Owner
+                    </button>
+                </div>
+
+            </nav>
+        </div>
+    </header>
+
+    <!-- ─── HERO ─── -->
+    <section id="home" class="min-h-screen pt-36 pb-24 grid-bg overflow-hidden relative">
+
+        <div class="absolute left-0 top-40 w-96 h-96 bg-white/5 rounded-full blur-[120px]"></div>
+        <div class="absolute right-0 bottom-10 w-96 h-96 bg-white/5 rounded-full blur-[120px]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-[150px]"></div>
+
+        <div class="max-w-7xl mx-auto px-5 grid lg:grid-cols-2 gap-16 items-center relative z-10">
+
+            <div class="animate-rise">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-light text-xs text-gray-300">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    Accepting new projects
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black leading-[.96] mt-7 tracking-tight text-white">
+                    Build your
+                    <span class="gradient">next digital experience.</span>
+                </h1>
+                <p class="text-gray-400 text-lg leading-relaxed max-w-xl mt-7">
+                    We design and build premium websites, stores and digital products
+                    with a direct client-to-owner workflow.
+                </p>
+                <div class="flex flex-wrap gap-4 mt-9">
+                    <button onclick="openOrder()" class="px-7 py-4 rounded-2xl bg-gray-800 text-white font-bold shadow-xl shadow-white/5 hover:bg-gray-700 transition flex items-center gap-2">
+                        Start a Project
+                        <i data-lucide="arrow-right" class="w-4"></i>
+                    </button>
+                    <a href="#services" class="px-7 py-4 rounded-2xl glass-light font-bold hover:bg-white/10 transition text-gray-300">
+                        Explore Studio
+                    </a>
+                </div>
+                <div class="flex gap-10 mt-11">
+                    <div>
+                        <div class="text-2xl font-black text-white" id="heroProjects">50+</div>
+                        <div class="text-xs text-gray-500 mt-1">Projects</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-white">98%</div>
+                        <div class="text-xs text-gray-500 mt-1">Happy Clients</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-white">24/7</div>
+                        <div class="text-xs text-gray-500 mt-1">Communication</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative animate-float">
+                <div class="glass rounded-[30px] p-4 animate-glow shadow-2xl">
+                    <div class="rounded-2xl bg-[#0a0a0a] overflow-hidden">
+                        <div class="px-5 py-4 border-b border-white/5 flex justify-between">
+                            <div class="flex gap-2">
+                                <span class="w-3 h-3 rounded-full bg-red-400"></span>
+                                <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+                                <span class="w-3 h-3 rounded-full bg-green-400"></span>
+                            </div>
+                            <span class="text-xs text-gray-600">novaforge.site</span>
+                        </div>
+                        <div class="p-8">
+                            <div class="flex justify-between">
+                                <div class="h-5 w-36 rounded bg-white/10 animate-pulse-gentle"></div>
+                                <div class="h-5 w-20 rounded bg-white/5"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mt-8">
+                                <div class="h-40 rounded-2xl bg-gradient-to-br from-white/10 to-white/5"></div>
+                                <div class="h-40 rounded-2xl bg-white/5"></div>
+                            </div>
+                            <div class="h-5 w-2/3 bg-white/10 rounded mt-7"></div>
+                            <div class="h-3 w-full bg-white/5 rounded mt-3"></div>
+                            <div class="h-3 w-4/5 bg-white/5 rounded mt-2"></div>
+                            <div class="flex gap-3 mt-7">
+                                <div class="h-11 w-28 bg-gray-700 rounded-xl"></div>
+                                <div class="h-11 w-28 bg-white/10 rounded-xl"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -right-5 top-12 glass rounded-2xl p-4 flex gap-3 items-center shadow-xl">
+                    <div class="w-10 h-10 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center">
+                        <i data-lucide="check"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-gray-500">PROJECT STATUS</div>
+                        <div class="font-bold text-sm text-white">Building website</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── SERVICES ─── -->
+    <section id="services" class="py-28 relative">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="text-center max-w-2xl mx-auto">
+                <p class="text-gray-400 text-xs font-bold uppercase tracking-[.25em]">Our capabilities</p>
+                <h2 class="text-4xl md:text-5xl font-black mt-3 tracking-tight text-white">Everything in one studio.</h2>
+                <p class="text-gray-500 mt-5">From first conversation to final delivery.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-14">
+                <div class="glass-card rounded-3xl p-7 hover:-translate-y-2 transition-all hover:shadow-xl hover:shadow-white/5 group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 text-gray-300 flex items-center justify-center group-hover:scale-110 transition">
+                        <i data-lucide="layout-dashboard"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mt-6 text-white">Custom Websites</h3>
+                    <p class="text-gray-400 mt-3">Premium interfaces designed specifically around your brand.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-7 hover:-translate-y-2 transition-all hover:shadow-xl hover:shadow-white/5 group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 text-gray-300 flex items-center justify-center group-hover:scale-110 transition">
+                        <i data-lucide="shopping-bag"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mt-6 text-white">E-Commerce</h3>
+                    <p class="text-gray-400 mt-3">Modern online stores and conversion-focused experiences.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-7 hover:-translate-y-2 transition-all hover:shadow-xl hover:shadow-white/5 group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 text-gray-300 flex items-center justify-center group-hover:scale-110 transition">
+                        <i data-lucide="smartphone"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mt-6 text-white">Responsive Design</h3>
+                    <p class="text-gray-400 mt-3">Beautiful experiences across mobile, tablet and desktop.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-7 hover:-translate-y-2 transition-all hover:shadow-xl hover:shadow-white/5 group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 text-gray-300 flex items-center justify-center group-hover:scale-110 transition">
+                        <i data-lucide="zap"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mt-6 text-white">Performance</h3>
+                    <p class="text-gray-400 mt-3">Fast and lightweight experiences built for real users.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-7 hover:-translate-y-2 transition-all hover:shadow-xl hover:shadow-white/5 group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 text-gray-300 flex items-center justify-center group-hover:scale-110 transition">
+                        <i data-lucide="search"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mt-6 text-white">SEO Foundation</h3>
+                    <p class="text-gray-400 mt-3">Clean structures and foundations for search visibility.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-7 hover:-translate-y-2 transition-all hover:shadow-xl hover:shadow-white/5 group">
+                    <div class="w-14 h-14 rounded-2xl bg-white/5 text-gray-300 flex items-center justify-center group-hover:scale-110 transition">
+                        <i data-lucide="messages-square"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mt-6 text-white">Direct Communication</h3>
+                    <p class="text-gray-400 mt-3">Chat directly with the owner throughout your project.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── PRICING ─── -->
+    <section id="pricing" class="py-28 bg-white/[.015]">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="text-center">
+                <p class="text-gray-400 text-xs uppercase tracking-[.25em] font-bold">Pricing</p>
+                <h2 class="text-4xl md:text-5xl font-black mt-3 tracking-tight text-white">Pick your direction.</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6 mt-14">
+                <div class="glass-card rounded-3xl p-8 hover:-translate-y-1 transition hover:shadow-xl hover:shadow-white/5">
+                    <p class="text-gray-400">Starter</p>
+                    <h3 class="text-4xl font-black mt-3 text-white">₹4,999</h3>
+                    <p class="text-gray-500 mt-2">For personal projects.</p>
+                    <ul class="mt-8 space-y-4 text-sm text-gray-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>3–5 pages</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Responsive layout</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Contact section</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Basic animations</li>
+                    </ul>
+                    <button onclick="choosePlan('Starter')" class="w-full mt-9 py-3 rounded-xl bg-white/10 hover:bg-white/20 transition font-medium text-white">
+                        Choose Starter
+                    </button>
+                </div>
+                <div class="glass-card rounded-3xl p-8 border border-white/10 relative hover:-translate-y-1 transition hover:shadow-xl hover:shadow-white/10">
+                    <div class="absolute top-5 right-5 px-3 py-1 rounded-full bg-gray-700 text-xs font-bold tracking-wide text-white">POPULAR</div>
+                    <p class="text-gray-300">Professional</p>
+                    <h3 class="text-4xl font-black mt-3 text-white">₹9,999</h3>
+                    <p class="text-gray-500 mt-2">For creators and businesses.</p>
+                    <ul class="mt-8 space-y-4 text-sm text-gray-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>8–12 pages</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Advanced interface</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Animations</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>SEO foundation</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Priority communication</li>
+                    </ul>
+                    <button onclick="choosePlan('Professional')" class="w-full mt-9 py-3 rounded-xl bg-gray-800 text-white font-bold hover:bg-gray-700 transition">
+                        Choose Professional
+                    </button>
+                </div>
+                <div class="glass-card rounded-3xl p-8 hover:-translate-y-1 transition hover:shadow-xl hover:shadow-white/5">
+                    <p class="text-gray-400">Premium</p>
+                    <h3 class="text-4xl font-black mt-3 text-white">₹19,999+</h3>
+                    <p class="text-gray-500 mt-2">For advanced businesses.</p>
+                    <ul class="mt-8 space-y-4 text-sm text-gray-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Custom architecture</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Advanced dashboard</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>E-commerce</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Custom integrations</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 text-gray-400"></i>Dedicated support</li>
+                    </ul>
+                    <button onclick="choosePlan('Premium')" class="w-full mt-9 py-3 rounded-xl bg-white/10 hover:bg-white/20 transition font-medium text-white">
+                        Choose Premium
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── PROCESS ─── -->
+    <section id="process" class="py-28">
+        <div class="max-w-7xl mx-auto px-5">
+            <div class="text-center">
+                <p class="text-gray-400 text-xs uppercase tracking-[.25em] font-bold">Workflow</p>
+                <h2 class="text-4xl md:text-5xl font-black mt-3 tracking-tight text-white">One simple journey.</h2>
+            </div>
+            <div class="grid md:grid-cols-4 gap-5 mt-14">
+                <div class="glass-card rounded-3xl p-7 text-center hover:-translate-y-2 transition hover:shadow-xl hover:shadow-white/5">
+                    <div class="text-5xl font-black text-gray-400">01</div>
+                    <h3 class="font-bold text-xl mt-5 text-white">Order</h3>
+                    <p class="text-gray-400 mt-3">Describe what you want.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-7 text-center hover:-translate-y-2 transition hover:shadow-xl hover:shadow-white/5">
+                    <div class="text-5xl font-black text-gray-400">02</div>
+                    <h3 class="font-bold text-xl mt-5 text-white">Discuss</h3>
+                    <p class="text-gray-400 mt-3">Talk directly with the owner.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-7 text-center hover:-translate-y-2 transition hover:shadow-xl hover:shadow-white/5">
+                    <div class="text-5xl font-black text-gray-400">03</div>
+                    <h3 class="font-bold text-xl mt-5 text-white">Build</h3>
+                    <p class="text-gray-400 mt-3">Your website is developed.</p>
+                </div>
+                <div class="glass-card rounded-3xl p-7 text-center hover:-translate-y-2 transition hover:shadow-xl hover:shadow-white/5">
+                    <div class="text-5xl font-black text-gray-400">04</div>
+                    <h3 class="font-bold text-xl mt-5 text-white">Deliver</h3>
+                    <p class="text-gray-400 mt-3">Your finished website is delivered.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CONTACT ─── -->
+    <section id="contact" class="py-28">
+        <div class="max-w-5xl mx-auto px-5">
+            <div class="glass rounded-[32px] p-10 md:p-16 text-center shadow-glow">
+                <p class="text-gray-400 text-xs uppercase tracking-[.25em] font-bold">Start building</p>
+                <h2 class="text-4xl md:text-6xl font-black mt-4 tracking-tight text-white">
+                    Your idea deserves a
+                    <span class="gradient">great website.</span>
+                </h2>
+                <p class="text-gray-400 max-w-xl mx-auto mt-5">Place an order and work directly with the owner.</p>
+                <button onclick="openOrder()" class="mt-8 px-8 py-4 rounded-2xl bg-white text-black font-bold hover:scale-105 transition shadow-xl shadow-white/10">
+                    Start Project
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/5 py-10">
+        <div class="max-w-7xl mx-auto px-5 flex flex-col md:flex-row justify-between gap-4 text-gray-500 text-sm">
+            <p>© 2026 NovaForge Digital Studio</p>
+            <p class="flex items-center gap-2">
+                <span>HTML</span> <span class="text-gray-700">•</span>
+                <span>Tailwind CSS</span> <span class="text-gray-700">•</span>
+                <span>JavaScript</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- ─── CLIENT LOGIN / SIGN-UP MODAL ─── -->
+    <div id="clientLoginModal" class="fixed inset-0 z-[100] modal-bg flex items-center justify-center p-5 hide">
+        <div class="glass rounded-3xl w-full max-w-md p-8 relative animate-slide-up">
+            <button onclick="closeModal('clientLoginModal')" class="absolute top-5 right-5 text-gray-500 hover:text-white transition">
+                <i data-lucide="x"></i>
+            </button>
+
+            <div class="w-14 h-14 rounded-2xl bg-white/5 text-gray-300 flex items-center justify-center">
+                <i data-lucide="user"></i>
+            </div>
+
+            <!-- Login form -->
+            <div id="clientLoginForm">
+                <h2 class="text-3xl font-black mt-6 tracking-tight text-white">Client Login</h2>
+                <p class="text-gray-500 mt-2">Access your projects and chat.</p>
+                <input id="clientEmail" type="email" placeholder="Gmail" class="input mt-7" autocomplete="email">
+                <input id="clientPassword" type="password" placeholder="Password" class="input mt-4" autocomplete="current-password">
+                <button onclick="clientLogin()" class="w-full mt-5 py-3 rounded-xl bg-gray-800 text-white font-bold hover:bg-gray-700 transition">
+                    Continue
+                </button>
+                <p id="clientError" class="text-red-400 text-sm mt-3 hide"></p>
+                <p class="text-xs text-gray-600 mt-5">
+                    Don't have an account? <span class="auth-toggle" onclick="toggleAuthMode()">Create one</span>
+                </p>
+            </div>
+
+            <!-- Sign-up form (hidden initially) -->
+            <div id="clientSignupForm" class="hide">
+                <h2 class="text-3xl font-black mt-6 tracking-tight text-white">Create Account</h2>
+                <p class="text-gray-500 mt-2">Join NovaForge as a client.</p>
+                <input id="signupName" type="text" placeholder="Full name" class="input mt-7">
+                <input id="signupEmail" type="email" placeholder="Gmail" class="input mt-4">
+                <input id="signupPassword" type="password" placeholder="Password" class="input mt-4">
+                <input id="signupConfirm" type="password" placeholder="Confirm password" class="input mt-4">
+                <button onclick="clientSignup()" class="w-full mt-5 py-3 rounded-xl bg-gray-800 text-white font-bold hover:bg-gray-700 transition">
+                    Sign Up
+                </button>
+                <p id="signupError" class="text-red-400 text-sm mt-3 hide"></p>
+                <p class="text-xs text-gray-600 mt-5">
+                    Already have an account? <span class="auth-toggle" onclick="toggleAuthMode()">Login</span>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ─── OWNER LOGIN ─── -->
+    <div id="ownerLoginModal" class="fixed inset-0 z-[100] modal-bg flex items-center justify-center p-5 hide">
+        <div class="glass rounded-3xl w-full max-w-md p-8 relative animate-slide-up">
+            <button onclick="closeModal('ownerLoginModal')" class="absolute top-5 right-5 text-gray-500 hover:text-white transition">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="w-14 h-14 rounded-2xl bg-white/5 text-gray-300 flex items-center justify-center">
+                <i data-lucide="shield-check"></i>
+            </div>
+            <h2 class="text-3xl font-black mt-6 tracking-tight text-white">Owner Portal</h2>
+            <p class="text-gray-500 mt-2">Secure owner access.</p>
+            <input id="ownerEmail" type="email" placeholder="Owner Gmail" class="input mt-7" autocomplete="email">
+            <input id="ownerPassword" type="password" placeholder="Password" class="input mt-4" autocomplete="current-password">
+            <button onclick="ownerLogin()" class="w-full mt-5 py-3 rounded-xl bg-gray-800 text-white font-bold hover:bg-gray-700 transition">
+                Enter Portal
+            </button>
+            <p id="ownerError" class="text-red-400 text-sm mt-3 hide"></p>
+            <div class="mt-6 p-4 rounded-xl bg-white/5 text-xs text-gray-500 border border-white/5">
+                <div class="font-bold text-gray-300 mb-2">Demo credentials</div>
+                Gmail: owner@gmail.com<br>
+                Password: Owner@123
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── ORDER MODAL ─── -->
+    <div id="orderModal" class="fixed inset-0 z-[100] modal-bg flex items-center justify-center p-5 hide">
+        <div class="glass rounded-3xl w-full max-w-2xl p-8 relative max-h-[90vh] overflow-y-auto animate-slide-up">
+            <button onclick="closeModal('orderModal')" class="absolute top-5 right-5 text-gray-500 hover:text-white transition">
+                <i data-lucide="x"></i>
+            </button>
+            <h2 class="text-3xl font-black tracking-tight text-white">Start Your Project</h2>
+            <p class="text-gray-500 mt-2">Tell the owner exactly what you want.</p>
+            <div class="grid md:grid-cols-2 gap-4 mt-7">
+                <input id="orderName" placeholder="Your name" class="input">
+                <input id="orderEmail" placeholder="Gmail" class="input" type="email">
+                <select id="orderPlan" class="input text-gray-300">
+                    <option>Starter</option>
+                    <option selected>Professional</option>
+                    <option>Premium</option>
+                </select>
+                <select id="orderType" class="input text-gray-300">
+                    <option>Business Website</option>
+                    <option>Portfolio</option>
+                    <option>E-Commerce</option>
+                    <option>Landing Page</option>
+                    <option>Web Application</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <textarea id="orderDescription" rows="6" placeholder="Describe your website, pages, features, colors, references and anything else..." class="input mt-4"></textarea>
+            <button onclick="placeOrder()" class="w-full mt-5 py-4 rounded-xl bg-gray-800 text-white font-bold hover:bg-gray-700 transition">
+                Place Order
+            </button>
+        </div>
+    </div>
+
+    <!-- ─── CLIENT PORTAL ─── -->
+    <div id="clientPortal" class="fixed inset-0 z-[80] portal-container overflow-y-auto hide">
+        <div class="max-w-7xl mx-auto px-5 py-7">
+
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <div>
+                    <p class="text-gray-400 text-xs tracking-widest uppercase">Client Portal</p>
+                    <h1 class="text-3xl md:text-4xl font-black mt-1 tracking-tight text-white">My Account</h1>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Home Page button -->
+                    <button onclick="goHome()" class="px-4 py-2 rounded-xl glass-light hover:bg-white/10 transition text-sm text-gray-300 flex items-center gap-2">
+                        <i data-lucide="home" class="w-4"></i>
+                        Home Page
+                    </button>
+                    <button onclick="showClientView('orders')" id="clientOrdersBtn" class="px-4 py-2 rounded-xl bg-gray-800 text-white hover:bg-gray-700 transition text-sm flex items-center gap-2 font-medium view-btn view-btn-active">
+                        <i data-lucide="list-ordered" class="w-4"></i>
+                        My Orders
+                    </button>
+                    <button onclick="openOrder()" class="px-4 py-2 rounded-xl bg-gray-700 text-white hover:bg-gray-600 transition text-sm flex items-center gap-2 font-medium">
+                        <i data-lucide="plus" class="w-4"></i>
+                        New Project
+                    </button>
+                    <button onclick="clientLogoutFromPortal()" class="px-4 py-2 rounded-xl glass-light hover:bg-white/10 transition text-sm text-gray-300">
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Shared Stats -->
+            <div id="clientStatsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="client-stat">
+                    <div class="number" id="clientTotal">0</div>
+                    <div class="label">Total Projects</div>
+                </div>
+                <div class="client-stat">
+                    <div class="number text-green-400" id="clientActive">0</div>
+                    <div class="label">Active</div>
+                </div>
+                <div class="client-stat">
+                    <div class="number text-blue-400" id="clientCompleted">0</div>
+                    <div class="label">Completed</div>
+                </div>
+                <div class="client-stat">
+                    <div class="number text-yellow-400" id="clientPending">0</div>
+                    <div class="label">In Progress</div>
+                </div>
+            </div>
+
+            <!-- Views -->
+            <div id="clientDashboardView" class="hide">
+                <div class="glass-card rounded-3xl p-8 text-center">
+                    <h2 class="text-2xl font-bold text-white">Welcome back!</h2>
+                    <p class="text-gray-400 mt-2">Manage your projects, track progress, and communicate with the owner.</p>
+                    <button onclick="showClientView('orders')" class="mt-4 px-6 py-3 rounded-xl bg-gray-800 text-white hover:bg-gray-700 transition">
+                        View My Orders
+                    </button>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4 mt-6">
+                    <div class="glass-card rounded-2xl p-6 text-center">
+                        <div class="text-3xl font-black text-green-400" id="dashActive">0</div>
+                        <p class="text-gray-500 text-sm mt-1">Active Projects</p>
+                    </div>
+                    <div class="glass-card rounded-2xl p-6 text-center">
+                        <div class="text-3xl font-black text-yellow-400" id="dashPending">0</div>
+                        <p class="text-gray-500 text-sm mt-1">In Progress</p>
+                    </div>
+                    <div class="glass-card rounded-2xl p-6 text-center">
+                        <div class="text-3xl font-black text-blue-400" id="dashCompleted">0</div>
+                        <p class="text-gray-500 text-sm mt-1">Completed</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="clientOrdersView">
+                <div id="clientProjects"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ─── OWNER PORTAL ─── -->
+    <div id="ownerPortal" class="fixed inset-0 z-[80] portal-container overflow-y-auto hide">
+
+        <div class="max-w-[1500px] mx-auto px-5 py-7">
+
+            <!-- owner header -->
+            <div class="portal-header flex flex-col md:flex-row justify-between gap-5">
+
+                <div>
+                    <p class="text-gray-400 text-xs tracking-[.25em] uppercase">Owner Control Center</p>
+                    <h1 class="text-3xl md:text-4xl font-black mt-1 tracking-tight text-white">Project Command</h1>
+                    <p class="text-gray-500 mt-2">Manage orders, conversations and deliveries.</p>
+                </div>
+
+                <div class="owner-account-wrapper">
+                    <button id="ownerAccountButton" onclick="toggleOwnerMenu()" class="flex items-center gap-3 px-4 py-3 rounded-2xl glass-light hover:bg-white/10 transition border border-white/5">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center shadow-lg shadow-white/5">
+                            <i data-lucide="user-round" class="w-5 text-white"></i>
+                        </div>
+                        <div class="hidden sm:block text-left">
+                            <p class="text-[10px] text-gray-500">OWNER ACCOUNT</p>
+                            <p class="font-bold text-sm text-white">Owner</p>
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 text-gray-400"></i>
+                    </button>
+
+                    <div id="ownerMenu" class="owner-menu-dropdown hide">
+                        <div class="px-3 py-3 border-b border-white/10">
+                            <p class="text-[10px] text-gray-500">SIGNED IN AS</p>
+                            <p class="font-semibold text-sm mt-1 text-white">owner@gmail.com</p>
+                        </div>
+                        <button onclick="ownerLogout()" class="w-full mt-1 px-3 py-3 rounded-xl text-left text-red-400 hover:bg-red-500/10 transition flex items-center gap-3">
+                            <i data-lucide="log-out" class="w-4"></i>
+                            Logout Owner
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- stats -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+                <div class="glass-card rounded-2xl p-5 hover:shadow-xl hover:shadow-white/5 transition">
+                    <p class="text-gray-500 text-sm">Total Orders</p>
+                    <p id="totalOrders" class="text-3xl font-black mt-2 text-white">0</p>
+                </div>
+                <div class="glass-card rounded-2xl p-5 hover:shadow-xl hover:shadow-white/5 transition">
+                    <p class="text-gray-500 text-sm">Active Projects</p>
+                    <p id="activeOrders" class="text-3xl font-black mt-2 text-blue-400">0</p>
+                </div>
+                <div class="glass-card rounded-2xl p-5 hover:shadow-xl hover:shadow-white/5 transition">
+                    <p class="text-gray-500 text-sm">Completed</p>
+                    <p id="completedOrders" class="text-3xl font-black mt-2 text-green-400">0</p>
+                </div>
+                <div class="glass-card rounded-2xl p-5 hover:shadow-xl hover:shadow-white/5 transition">
+                    <p class="text-gray-500 text-sm">Completed Value</p>
+                    <p id="revenue" class="text-3xl font-black mt-2 gradient-gold">₹0</p>
+                </div>
+            </div>
+
+            <!-- main -->
+            <div class="grid lg:grid-cols-[340px_1fr] gap-5 mt-8">
+
+                <div class="glass rounded-3xl p-5 h-fit">
+                    <div class="flex justify-between items-center">
+                        <h2 class="font-bold text-white">Incoming Orders</h2>
+                        <span id="orderBadge" class="text-xs px-2 py-1 rounded-full bg-white/5 text-gray-300">0</span>
+                    </div>
+                    <div id="ownerOrders" class="space-y-3 mt-5 order-list-scroll"></div>
+                </div>
+
+                <div id="ownerProject" class="glass rounded-3xl p-10 text-center text-gray-500">
+                    <i data-lucide="mouse-pointer-click" class="w-12 h-12 mx-auto mb-4 opacity-40"></i>
+                    <p>Select an order to manage it.</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ─── DELIVERY MODAL ─── -->
+    <div id="deliveryModal" class="fixed inset-0 z-[120] modal-bg flex items-center justify-center p-5 hide">
+        <div class="glass rounded-3xl w-full max-w-lg p-7 animate-slide-up">
+            <div class="flex justify-between">
+                <div>
+                    <p class="text-green-400 text-xs uppercase tracking-widest">Delivery</p>
+                    <h2 class="text-2xl font-black mt-1 tracking-tight text-white">Deliver Website</h2>
+                </div>
+                <button onclick="closeModal('deliveryModal')" class="text-gray-500 hover:text-white transition">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <input id="deliveryTitle" placeholder="Website title" class="input mt-7">
+            <input id="deliveryURL" placeholder="Website URL, e.g. https://example.com" class="input mt-4">
+            <textarea id="deliveryNote" rows="4" placeholder="Delivery message..." class="input mt-4"></textarea>
+            <button onclick="deliverWebsite()" class="w-full mt-5 py-3 rounded-xl bg-green-600 text-white font-bold hover:bg-green-500 transition flex items-center justify-center gap-2">
+                <i data-lucide="upload" class="w-4"></i>
+                Complete & Deliver
+            </button>
+        </div>
+    </div>
+
+    <!-- ─── CHAT WINDOW ─── -->
+    <div id="chatWindow" class="fixed bottom-5 right-5 z-[160] w-[calc(100vw-30px)] max-w-md glass rounded-3xl overflow-hidden shadow-2xl hide">
+        <div class="px-5 py-4 border-b border-white/10 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center">
+                    <i data-lucide="messages-square" class="text-white"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-white">Project Chat</p>
+                    <p class="text-xs text-green-400">Owner communication</p>
+                </div>
+            </div>
+            <button onclick="closeChat()" class="text-gray-500 hover:text-white transition">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div id="chatMessages" class="h-80 overflow-y-auto p-4 space-y-3 chat-scroll"></div>
+        <div class="p-4 border-t border-white/10 flex gap-2">
+            <input id="chatInput" onkeydown="if(event.key==='Enter')sendMessage()" placeholder="Write a message..." class="input">
+            <button onclick="sendMessage()" class="w-12 rounded-xl bg-gray-700 flex items-center justify-center shrink-0 hover:bg-gray-600 transition">
+                <i data-lucide="send" class="w-4 text-white"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ─── CHAT BUTTON ─── -->
+    <button id="chatButton" onclick="openChat()" class="fixed bottom-5 right-5 z-[150] w-14 h-14 rounded-2xl bg-gray-800 flex items-center justify-center shadow-xl hover:scale-110 transition hide">
+        <i data-lucide="message-circle" class="text-white"></i>
+    </button>
+
+    <!-- ─── SCRIPT ─── -->
+    <script>
+        /* ============================================================
+           DATABASE
+           ============================================================ */
+        const KEY = "novaforge_orders";
+        const USERS_KEY = "novaforge_users";
+
+        let orders = JSON.parse(localStorage.getItem(KEY) || "[]");
+        let selectedOrder = null;
+        let clientEmail = null;
+        let typingTimeout = null;
+        let currentClientView = 'orders'; // 'dashboard' or 'orders'
+
+        // Load users or initialize empty
+        let users = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
+
+        /* ============================================================
+           STARTUP
+           ============================================================ */
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            if (!orders.length) createDemoOrder();
+            restoreSessions();
+            renderOwner();
+            updateHeroStats();
+            setInterval(() => {
+                if (!document.getElementById("chatWindow").classList.contains("hide")) {
+                    renderChat(true);
+                }
+            }, 5000);
+        });
+
+        /* ============================================================
+           DEMO ORDER
+           ============================================================ */
+        function createDemoOrder() {
+            orders.push({
+                id: "NF-" + String(Math.floor(100000 + Math.random() * 900000)),
+                name: "Demo Client",
+                email: "client@gmail.com",
+                plan: "Professional",
+                price: 9999,
+                type: "Business Website",
+                description: "Premium business website with modern interface, responsive design and contact functionality.",
+                status: 3,
+                created: new Date().toISOString(),
+                messages: [
+                    { sender: "client", text: "Hello! I want a premium website for my business.", time: time() },
+                    { sender: "owner", text: "Sure! Tell me about your business and the pages you need.", time: time() }
+                ],
+                website: null
+            });
+            save();
+        }
+
+        /* ============================================================
+           STORAGE
+           ============================================================ */
+        function save() {
+            localStorage.setItem(KEY, JSON.stringify(orders));
+        }
+
+        function saveUsers() {
+            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        }
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        function toast(message, type = "info", duration = 4000) {
+            const container = document.getElementById("toastContainer");
+            const el = document.createElement("div");
+            el.className = `toast toast-${type}`;
+            const icons = { success: "check-circle", error: "alert-circle", warning: "alert-triangle", info: "info" };
+            el.innerHTML = `
+            <i data-lucide="${icons[type] || 'info'}" class="w-5 h-5 ${type === 'success' ? 'text-green-400' : type === 'error' ? 'text-red-400' : type === 'warning' ? 'text-yellow-400' : 'text-gray-400'}"></i>
+            <span class="text-sm">${message}</span>
+          `;
+            container.appendChild(el);
+            lucide.createIcons();
+            setTimeout(() => {
+                el.style.opacity = "0";
+                el.style.transform = "translateY(10px)";
+                el.style.transition = "all .3s ease";
+                setTimeout(() => el.remove(), 300);
+            }, duration);
+        }
+
+        /* ============================================================
+           MODALS
+           ============================================================ */
+        function openModal(id) {
+            document.getElementById(id).classList.remove("hide");
+            document.getElementById(id).style.display = "flex";
+            lucide.createIcons();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add("hide");
+            document.getElementById(id).style.display = "none";
+        }
+
+        /* ============================================================
+           AUTH TOGGLE (Login / Sign-up)
+           ============================================================ */
+        let authMode = 'login';
+
+        function toggleAuthMode() {
+            const loginForm = document.getElementById('clientLoginForm');
+            const signupForm = document.getElementById('clientSignupForm');
+            if (authMode === 'login') {
+                loginForm.classList.add('hide');
+                signupForm.classList.remove('hide');
+                authMode = 'signup';
+                document.getElementById('clientError').classList.add('hide');
+                document.getElementById('signupError').classList.add('hide');
+            } else {
+                loginForm.classList.remove('hide');
+                signupForm.classList.add('hide');
+                authMode = 'login';
+                document.getElementById('clientError').classList.add('hide');
+                document.getElementById('signupError').classList.add('hide');
+            }
+        }
+
+        /* ============================================================
+           CLIENT SIGN-UP
+           ============================================================ */
+        function clientSignup() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirm = document.getElementById('signupConfirm').value;
+            const errorEl = document.getElementById('signupError');
+
+            if (!name || !email || !password || !confirm) {
+                errorEl.textContent = "All fields are required.";
+                errorEl.classList.remove('hide');
+                return;
+            }
+            if (password.length < 6) {
+                errorEl.textContent = "Password must be at least 6 characters.";
+                errorEl.classList.remove('hide');
+                return;
+            }
+            if (password !== confirm) {
+                errorEl.textContent = "Passwords do not match.";
+                errorEl.classList.remove('hide');
+                return;
+            }
+            if (!email.includes('@')) {
+                errorEl.textContent = "Enter a valid email.";
+                errorEl.classList.remove('hide');
+                return;
+            }
+
+            if (users.find(u => u.email === email)) {
+                errorEl.textContent = "Account already exists. Please login.";
+                errorEl.classList.remove('hide');
+                return;
+            }
+
+            users.push({ name, email, password });
+            saveUsers();
+
+            clientEmail = email;
+            localStorage.setItem("novaforge_client", JSON.stringify({ name, email }));
+            closeModal('clientLoginModal');
+            updateNavForClient(name);
+            openClientPortal();
+            toast("Account created! Welcome " + name, "success");
+        }
+
+        /* ============================================================
+           CLIENT LOGIN
+           ============================================================ */
+        function openClientLogin() {
+            if (authMode === 'signup') {
+                toggleAuthMode();
+            }
+            document.getElementById('clientEmail').value = '';
+            document.getElementById('clientPassword').value = '';
+            document.getElementById('clientError').classList.add('hide');
+            document.getElementById('signupError').classList.add('hide');
+            document.getElementById('signupName').value = '';
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('signupConfirm').value = '';
+            openModal("clientLoginModal");
+        }
+
+        function clientLogin() {
+            const email = document.getElementById("clientEmail").value.trim();
+            const password = document.getElementById("clientPassword").value.trim();
+            const error = document.getElementById("clientError");
+
+            if (!email.includes("@")) { error.textContent = "Enter a valid email.";
+                error.classList.remove("hide"); return; }
+            if (!password) { error.textContent = "Enter your password.";
+                error.classList.remove("hide"); return; }
+
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                clientEmail = email;
+                localStorage.setItem("novaforge_client", JSON.stringify({ name: user.name, email }));
+                closeModal("clientLoginModal");
+                updateNavForClient(user.name);
+                openClientPortal();
+                toast("Welcome back, " + user.name + "!", "success");
+                return;
+            }
+
+            const existingUser = users.find(u => u.email === email);
+            if (existingUser) {
+                error.textContent = "Incorrect password.";
+                error.classList.remove("hide");
+                return;
+            }
+
+            // Demo fallback
+            const name = email.split("@")[0];
+            clientEmail = email;
+            localStorage.setItem("novaforge_client", JSON.stringify({ name, email }));
+            closeModal("clientLoginModal");
+            updateNavForClient(name);
+            openClientPortal();
+            toast("Welcome, " + name + "!", "success");
+        }
+
+        /* ============================================================
+           CLIENT LOGOUT
+           ============================================================ */
+        function clientLogoutFromNav() {
+            clientLogoutCommon();
+            document.getElementById("clientPortal").classList.add("hide");
+            closeChat();
+        }
+
+        function clientLogoutFromPortal() {
+            clientLogoutCommon();
+            document.getElementById("clientPortal").classList.add("hide");
+            closeChat();
+        }
+
+        function clientLogoutCommon() {
+            localStorage.removeItem("novaforge_client");
+            clientEmail = null;
+            document.getElementById("clientNavInfo").classList.add("hide");
+            document.getElementById("clientNavBtn").classList.remove("hide");
+            toast("Logged out.", "info");
+        }
+
+        /* ============================================================
+           UPDATE NAVBAR
+           ============================================================ */
+        function updateNavForClient(name) {
+            document.getElementById("clientGreeting").textContent = "Hi, " + name;
+            document.getElementById("clientNavInfo").classList.remove("hide");
+            document.getElementById("clientNavBtn").classList.add("hide");
+            // Re-init lucide for new icons
+            lucide.createIcons();
+        }
+
+        /* ============================================================
+           OPEN MY ORDERS (from navbar)
+           ============================================================ */
+        function openClientOrders() {
+            const client = JSON.parse(localStorage.getItem("novaforge_client") || "null");
+            if (!client) {
+                toast("Please login first.", "warning");
+                openClientLogin();
+                return;
+            }
+            clientEmail = client.email;
+            const portal = document.getElementById("clientPortal");
+            if (portal.classList.contains("hide")) {
+                openClientPortal(); // this sets view to orders by default
+            } else {
+                showClientView('orders');
+            }
+        }
+
+        /* ============================================================
+           GO HOME (renamed from Dashboard)
+           ============================================================ */
+        function goHome() {
+            // Just close the portal and smoothly scroll to the top of the homepage
+            document.getElementById("clientPortal").classList.add("hide");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeChat();
+        }
+
+        /* ============================================================
+           CLIENT PORTAL VIEWS
+           ============================================================ */
+        function showClientView(view) {
+            currentClientView = view;
+            const dashView = document.getElementById("clientDashboardView");
+            const ordersView = document.getElementById("clientOrdersView");
+            const dashBtn = document.getElementById("clientDashBtn");
+            const ordersBtn = document.getElementById("clientOrdersBtn");
+
+            if (view === 'dashboard') {
+                dashView.classList.remove('hide');
+                ordersView.classList.add('hide');
+                if (dashBtn) dashBtn.classList.add('view-btn-active');
+                if (ordersBtn) ordersBtn.classList.remove('view-btn-active');
+                updateClientStats();
+            } else {
+                dashView.classList.add('hide');
+                ordersView.classList.remove('hide');
+                if (ordersBtn) ordersBtn.classList.add('view-btn-active');
+                if (dashBtn) dashBtn.classList.remove('view-btn-active');
+                renderClientProjects();
+            }
+            lucide.createIcons();
+        }
+
+        function openClientPortal() {
+            document.getElementById("clientPortal").classList.remove("hide");
+            showClientView('orders');
+            updateClientStats();
+        }
+
+        /* ============================================================
+           ORDER
+           ============================================================ */
+        function openOrder() {
+            const client = JSON.parse(localStorage.getItem("novaforge_client") || "null");
+            if (!client) { toast("Please login as a client first.", "warning");
+                openClientLogin(); return; }
+            document.getElementById("orderName").value = client.name || "";
+            document.getElementById("orderEmail").value = client.email || "";
+            openModal("orderModal");
+        }
+
+        function choosePlan(plan) {
+            document.getElementById("orderPlan").value = plan;
+            openOrder();
+        }
+
+        function placeOrder() {
+            const name = document.getElementById("orderName").value.trim();
+            const email = document.getElementById("orderEmail").value.trim();
+            const plan = document.getElementById("orderPlan").value;
+            const type = document.getElementById("orderType").value;
+            const description = document.getElementById("orderDescription").value.trim();
+            if (!name || !email || !description) { toast("Please complete all required fields.", "error"); return; }
+            if (!email.includes("@")) { toast("Enter a valid email address.", "error"); return; }
+            const prices = { Starter: 4999, Professional: 9999, Premium: 19999 };
+            const order = {
+                id: "NF-" + String(Math.floor(100000 + Math.random() * 900000)),
+                name,
+                email,
+                plan,
+                price: prices[plan] || 9999,
+                type,
+                description,
+                status: 1,
+                created: new Date().toISOString(),
+                messages: [{ sender: "client", text: "I have placed a new website order.", time: time() }],
+                website: null
+            };
+            orders.unshift(order);
+            save();
+            localStorage.setItem("novaforge_client", JSON.stringify({ name, email }));
+            clientEmail = email;
+            closeModal("orderModal");
+            renderOwner();
+            if (!document.getElementById("clientPortal").classList.contains("hide")) {
+                renderClientProjects();
+                updateClientStats();
+            } else {
+                openClientPortal();
+            }
+            toast("Order placed! ID: " + order.id, "success", 5000);
+            updateHeroStats();
+        }
+
+        /* ============================================================
+           CLIENT PROJECTS & STATS
+           ============================================================ */
+        function updateClientStats() {
+            const list = orders.filter(o => o.email === clientEmail);
+            const total = list.length;
+            const active = list.filter(o => o.status < 4).length;
+            const completed = list.filter(o => o.status >= 4).length;
+            const inProgress = list.filter(o => o.status > 1 && o.status < 4).length;
+
+            document.getElementById("clientTotal").textContent = total;
+            document.getElementById("clientActive").textContent = active;
+            document.getElementById("clientCompleted").textContent = completed;
+            document.getElementById("clientPending").textContent = inProgress;
+
+            const dashActive = document.getElementById("dashActive");
+            const dashPending = document.getElementById("dashPending");
+            const dashCompleted = document.getElementById("dashCompleted");
+            if (dashActive) dashActive.textContent = active;
+            if (dashPending) dashPending.textContent = inProgress;
+            if (dashCompleted) dashCompleted.textContent = completed;
+        }
+
+        function renderClientProjects() {
+            const box = document.getElementById("clientProjects");
+            const list = orders.filter(o => o.email === clientEmail);
+            updateClientStats();
+
+            if (!list.length) {
+                box.innerHTML = `
+              <div class="glass-card rounded-3xl p-12 text-center">
+                <i data-lucide="folder-open" class="w-12 h-12 mx-auto text-gray-600"></i>
+                <h2 class="text-2xl font-bold mt-5 text-white">No orders yet</h2>
+                <p class="text-gray-500 mt-2">Start your first project today.</p>
+                <button onclick="openOrder()" class="mt-6 px-6 py-3 rounded-xl bg-gray-800 text-white font-bold hover:bg-gray-700 transition">
+                  Start Project
+                </button>
+              </div>
+            `;
+                lucide.createIcons();
+                return;
+            }
+
+            box.innerHTML = list.map(order => {
+                const progress = getProgress(order.status);
+                return `
+              <div class="glass-card rounded-3xl p-6 md:p-8 mb-5 hover:shadow-xl hover:shadow-white/5 transition">
+                <div class="flex flex-col md:flex-row justify-between gap-5">
+                  <div>
+                    <div class="flex gap-2 flex-wrap">
+                      <span class="text-xs px-3 py-1 rounded-full bg-white/5 text-gray-300">${order.id}</span>
+                      <span class="text-xs px-3 py-1 rounded-full ${order.status >= 4 ? 'bg-green-500/10 text-green-400' : 'bg-white/5 text-gray-400'}">
+                        ${statusText(order.status)}
+                      </span>
+                    </div>
+                    <h2 class="text-3xl font-black mt-5 text-white">${safe(order.type)}</h2>
+                    <p class="text-gray-500 mt-2">${safe(order.plan)} Plan · ₹${(order.price || 0).toLocaleString('en-IN')}</p>
+                  </div>
+                  <button onclick="selectChat('${order.id}')" class="h-fit px-5 py-3 rounded-xl bg-gray-700 text-white font-bold hover:bg-gray-600 transition">
+                    <i data-lucide="message-circle" class="w-4 inline mr-2"></i>
+                    Chat Owner
+                  </button>
+                </div>
+                <div class="mt-9">
+                  <div class="flex justify-between mb-3 text-sm">
+                    <span class="text-gray-500">Project Progress</span>
+                    <span class="font-bold text-white">${progress}%</span>
+                  </div>
+                  <div class="h-3 rounded-full progress-track overflow-hidden">
+                    <div class="progress-fill h-full rounded-full ${progress >= 100 ? 'bg-green-500 shadow-lg shadow-green-500/30' : 'bg-white'}" style="width:${progress}%"></div>
+                  </div>
+                </div>
+                <div class="grid sm:grid-cols-4 gap-3 mt-7">
+                  ${[1,2,3,4].map(stage => progressCard(["Order","Discussion","Building","Completed"][stage-1], stage, order.status)).join('')}
+                </div>
+                ${order.website ? `
+                  <div class="mt-7 p-5 rounded-2xl bg-green-500/10 border border-green-500/20">
+                    <div class="flex items-center gap-3">
+                      <div class="w-11 h-11 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center">
+                        <i data-lucide="globe"></i>
+                      </div>
+                      <div>
+                        <p class="font-bold text-white">${safe(order.website.title)}</p>
+                        <p class="text-xs text-gray-500">Website delivered</p>
+                      </div>
+                    </div>
+                    <p class="text-sm text-gray-300 mt-4">${safe(order.website.note)}</p>
+                    <a href="${safeAttr(order.website.url)}" target="_blank" class="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-xl bg-green-600 text-white font-bold hover:bg-green-500 transition">
+                      Open Website
+                      <i data-lucide="external-link" class="w-4"></i>
+                    </a>
+                  </div>
+                ` : ""}
+              </div>
+            `;
+            }).join("");
+            lucide.createIcons();
+        }
+
+        /* ============================================================
+           OWNER LOGIN
+           ============================================================ */
+        function openOwnerLogin() { openModal("ownerLoginModal"); }
+
+        function ownerLogin() {
+            const email = document.getElementById("ownerEmail").value.trim();
+            const password = document.getElementById("ownerPassword").value.trim();
+            const error = document.getElementById("ownerError");
+            if (email === "owner@gmail.com" && password === "Owner@123") {
+                localStorage.setItem("novaforge_owner", "true");
+                const login = document.getElementById("ownerLoginModal");
+                login.classList.add("hide");
+                login.style.display = "none";
+                document.getElementById("ownerPortal").classList.remove("hide");
+                renderOwner();
+                document.getElementById("ownerAccountButton").classList.remove("hide");
+                toast("Welcome back, Owner!", "success");
+            } else {
+                error.textContent = "Incorrect owner Gmail or password.";
+                error.classList.remove("hide");
+            }
+        }
+
+        function ownerLogout() {
+            localStorage.removeItem("novaforge_owner");
+            document.getElementById("ownerPortal").classList.add("hide");
+            document.getElementById("ownerMenu").classList.add("hide");
+            const login = document.getElementById("ownerLoginModal");
+            login.classList.remove("hide");
+            login.style.display = "flex";
+            toast("Logged out.", "info");
+        }
+
+        function toggleOwnerMenu() {
+            document.getElementById("ownerMenu").classList.toggle("hide");
+        }
+
+        document.addEventListener("click", e => {
+            const menu = document.getElementById("ownerMenu");
+            const btn = document.getElementById("ownerAccountButton");
+            if (menu && !menu.classList.contains("hide") && !menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.classList.add("hide");
+            }
+        });
+
+        /* ============================================================
+           OWNER DASHBOARD
+           ============================================================ */
+        function renderOwner() { updateStats();
+            renderOwnerOrders(); }
+
+        function updateStats() {
+            const total = orders.length;
+            const active = orders.filter(o => o.status < 4).length;
+            const completed = orders.filter(o => o.status >= 4).length;
+            const revenue = orders.filter(o => o.status >= 4).reduce((a, o) => a + (o.price || 0), 0);
+            document.getElementById("totalOrders").textContent = total;
+            document.getElementById("activeOrders").textContent = active;
+            document.getElementById("completedOrders").textContent = completed;
+            document.getElementById("revenue").textContent = "₹" + revenue.toLocaleString("en-IN");
+            document.getElementById("orderBadge").textContent = total;
+        }
+
+        function updateHeroStats() {
+            const el = document.getElementById("heroProjects");
+            if (el) el.textContent = orders.length + "+";
+        }
+
+        /* ============================================================
+           OWNER ORDERS
+           ============================================================ */
+        function renderOwnerOrders() {
+            const box = document.getElementById("ownerOrders");
+            if (!orders.length) {
+                box.innerHTML = `<p class="text-gray-500 text-sm text-center py-6">No orders yet.</p>`;
+                return;
+            }
+            box.innerHTML = orders.map(order => `
+            <button onclick="selectOwner('${order.id}')" class="w-full text-left p-4 rounded-2xl border transition ${selectedOrder === order.id ? 'bg-white/5 border-white/10' : 'bg-white/[.02] border-white/5 hover:bg-white/5'}">
+              <div class="flex justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="font-bold truncate text-white">${safe(order.name)}</p>
+                  <p class="text-xs text-gray-500 mt-1 truncate">${safe(order.type)}</p>
+                </div>
+                <span class="text-[10px] text-gray-500">${order.id}</span>
+              </div>
+              <div class="flex justify-between mt-3">
+                <span class="text-xs ${order.status >= 4 ? 'text-green-400' : 'text-gray-500'}">${statusText(order.status)}</span>
+                <span class="text-xs text-gray-400">${order.messages.length} msg</span>
+              </div>
+            </button>
+          `).join("");
+        }
+
+        /* ============================================================
+           SELECT OWNER ORDER
+           ============================================================ */
+        function selectOwner(id) {
+            selectedOrder = id;
+            renderOwnerOrders();
+            const order = orders.find(o => o.id === id);
+            renderOwnerProject(order);
+        }
+
+        /* ============================================================
+           OWNER PROJECT
+           ============================================================ */
+        function renderOwnerProject(order) {
+            const box = document.getElementById("ownerProject");
+            if (!order) {
+                box.className = "glass rounded-3xl p-10 text-center text-gray-500";
+                box.innerHTML = `
+              <i data-lucide="mouse-pointer-click" class="w-12 h-12 mx-auto mb-4 opacity-40"></i>
+              <p>Select an order to manage it.</p>
+            `;
+                lucide.createIcons();
+                return;
+            }
+            const progress = getProgress(order.status);
+            box.className = "glass rounded-3xl p-6 md:p-8";
+            box.innerHTML = `
+            <div class="flex flex-col md:flex-row justify-between gap-5">
+              <div>
+                <div class="flex gap-2 flex-wrap">
+                  <span class="text-xs px-3 py-1 rounded-full bg-white/5 text-gray-300">${order.id}</span>
+                  <span class="text-xs px-3 py-1 rounded-full bg-white/5 text-gray-400">${safe(order.plan)}</span>
+                  <span class="text-xs px-3 py-1 rounded-full bg-white/5 text-gray-400">₹${(order.price || 0).toLocaleString('en-IN')}</span>
+                </div>
+                <h2 class="text-3xl font-black mt-5 text-white">${safe(order.name)}</h2>
+                <p class="text-gray-500 mt-1">${safe(order.email)}</p>
+                <p class="text-gray-400 text-sm mt-2">Created: ${new Date(order.created).toLocaleDateString()}</p>
+              </div>
+              <button onclick="selectChat('${order.id}')" class="h-fit px-5 py-3 rounded-xl bg-gray-700 text-white font-bold hover:bg-gray-600 transition">
+                <i data-lucide="message-circle" class="w-4 inline mr-2"></i>
+                Open Chat
+              </button>
+            </div>
+            <div class="mt-8 p-5 rounded-2xl bg-white/[.02] border border-white/5">
+              <p class="text-xs uppercase tracking-widest text-gray-600">Client Requirements</p>
+              <p class="text-gray-300 leading-relaxed mt-3">${safe(order.description)}</p>
+            </div>
+            <div class="mt-8">
+              <div class="flex justify-between mb-4">
+                <div>
+                  <p class="font-bold text-white">Project Progress</p>
+                  <p class="text-xs text-gray-600 mt-1">Update the stage as you work.</p>
+                </div>
+                <span class="font-black text-white">${progress}%</span>
+              </div>
+              <div class="h-3 rounded-full progress-track overflow-hidden">
+                <div class="progress-fill h-full rounded-full ${progress >= 100 ? 'bg-green-500 shadow-lg shadow-green-500/30' : 'bg-white'}" style="width:${progress}%"></div>
+              </div>
+              <div class="grid sm:grid-cols-4 gap-3 mt-5">
+                ${[1,2,3,4].map(stage => `
+                  <button onclick="updateStatus('${order.id}',${stage})" class="p-4 rounded-xl text-left border transition ${order.status >= stage ? 'bg-green-500/10 border-green-500/20' : 'bg-white/[.02] border-white/5 hover:bg-white/5'}">
+                    <p class="text-xs text-gray-600">Stage ${stage}</p>
+                    <p class="font-bold mt-1 text-white">${["Order","Discussion","Building","Completed"][stage-1]}</p>
+                    ${order.status >= stage ? '<p class="text-[10px] text-green-400 mt-1">✓ done</p>' : ''}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+            <div class="mt-8 p-5 rounded-2xl border border-white/5 bg-white/[.02]">
+              <div class="flex flex-col md:flex-row justify-between gap-5">
+                <div>
+                  <p class="font-bold text-white">Website Delivery</p>
+                  <p class="text-gray-600 text-sm mt-1">Deliver the finished website directly to this client.</p>
+                </div>
+                <button onclick="openDelivery('${order.id}')" class="px-5 py-3 rounded-xl bg-green-600 text-white font-bold hover:bg-green-500 transition flex items-center gap-2">
+                  <i data-lucide="upload" class="w-4"></i>
+                  Deliver Website
+                </button>
+              </div>
+              ${order.website ? `
+                <div class="mt-5 p-4 rounded-xl bg-green-500/10 text-green-300 flex items-center gap-2">
+                  <i data-lucide="check-circle" class="w-4"></i>
+                  Website delivered: <strong>${safe(order.website.title)}</strong>
+                </div>
+              ` : ''}
+            </div>
+          `;
+            lucide.createIcons();
+        }
+
+        /* ============================================================
+           STATUS
+           ============================================================ */
+        function updateStatus(id, status) {
+            const order = orders.find(o => o.id === id);
+            if (!order || order.status === status) return;
+            order.status = status;
+            order.messages.push({ sender: "owner", text: "Project status updated to " + statusText(status) + ".", time: time() });
+            save();
+            renderOwner();
+            if (clientEmail === order.email) { renderClientProjects();
+                updateClientStats(); }
+            if (selectedOrder === id) renderOwnerProject(order);
+            toast("Status updated to " + statusText(status), "info");
+        }
+
+        /* ============================================================
+           DELIVERY
+           ============================================================ */
+        function openDelivery(id) {
+            selectedOrder = id;
+            document.getElementById("deliveryTitle").value = "";
+            document.getElementById("deliveryURL").value = "";
+            document.getElementById("deliveryNote").value = "";
+            openModal("deliveryModal");
+        }
+
+        function deliverWebsite() {
+            const order = orders.find(o => o.id === selectedOrder);
+            if (!order) return;
+            const title = document.getElementById("deliveryTitle").value.trim();
+            const url = document.getElementById("deliveryURL").value.trim();
+            const note = document.getElementById("deliveryNote").value.trim();
+            if (!title || !url) { toast("Enter the website title and URL.", "error"); return; }
+            if (!url.startsWith("http://") && !url.startsWith("https://")) { toast("Enter a valid URL starting with http:// or https://",
+                    "error"); return; }
+            order.website = { title, url, note };
+            order.status = 4;
+            order.messages.push({ sender: "owner", text: "Your website has been completed and delivered.", time: time() });
+            save();
+            closeModal("deliveryModal");
+            renderOwner();
+            renderOwnerProject(order);
+            if (clientEmail === order.email) { renderClientProjects();
+                updateClientStats(); }
+            toast("Website delivered successfully!", "success", 4000);
+        }
+
+        /* ============================================================
+           CHAT
+           ============================================================ */
+        function selectChat(id) { selectedOrder = id;
+            openChat(); }
+
+        function openChat() {
+            if (!selectedOrder) { toast("Select a project first.", "warning"); return; }
+            document.getElementById("chatWindow").classList.remove("hide");
+            document.getElementById("chatButton").classList.add("hide");
+            renderChat();
+        }
+
+        function closeChat() {
+            document.getElementById("chatWindow").classList.add("hide");
+            document.getElementById("chatButton").classList.remove("hide");
+        }
+
+        function renderChat(silent = false) {
+            const order = orders.find(o => o.id === selectedOrder);
+            if (!order) return;
+            const box = document.getElementById("chatMessages");
+            const prevScroll = box.scrollTop;
+            const prevHeight = box.scrollHeight;
+            box.innerHTML = order.messages.map(msg => {
+                const isOwner = msg.sender === "owner";
+                const isSystem = msg.sender === "system";
+                if (isSystem) {
+                    return `
+                <div class="flex justify-center">
+                  <div class="msg-system px-4 py-2 text-xs text-gray-500 max-w-[90%]">
+                    ${safe(msg.text)} <span class="text-gray-700">• ${msg.time}</span>
+                  </div>
+                </div>
+              `;
+                }
+                return `
+              <div class="flex ${isOwner ? 'justify-end' : 'justify-start'}">
+                <div class="max-w-[80%] rounded-2xl px-4 py-3 ${isOwner ? 'msg-owner' : 'msg-client'}">
+                  <p class="text-sm text-white">${safe(msg.text)}</p>
+                  <p class="text-[10px] ${isOwner ? 'text-white/40' : 'text-white/30'} mt-2">
+                    ${isOwner ? 'Owner' : 'Client'} • ${msg.time}
+                  </p>
+                </div>
+              </div>
+            `;
+            }).join("");
+            const typingEl = document.getElementById("chatTyping");
+            if (typingEl) typingEl.remove();
+            const shouldScroll = prevHeight - prevScroll < 150;
+            if (shouldScroll || !silent) box.scrollTop = box.scrollHeight;
+        }
+
+        function showTyping() {
+            const box = document.getElementById("chatMessages");
+            let el = document.getElementById("chatTyping");
+            if (!el) {
+                el = document.createElement("div");
+                el.id = "chatTyping";
+                el.className = "flex justify-start";
+                el.innerHTML = `
+              <div class="msg-client rounded-2xl px-4 py-3">
+                <div class="typing-dots"><span></span><span></span><span></span></div>
+              </div>
+            `;
+                box.appendChild(el);
+                box.scrollTop = box.scrollHeight;
+            }
+        }
+
+        function hideTyping() { const el = document.getElementById("chatTyping"); if (el) el.remove(); }
+
+        function sendMessage() {
+            const input = document.getElementById("chatInput");
+            const text = input.value.trim();
+            if (!text) return;
+            const order = orders.find(o => o.id === selectedOrder);
+            if (!order) { toast("No project selected.", "error"); return; }
+            const ownerLogged = localStorage.getItem("novaforge_owner") === "true";
+            const sender = ownerLogged ? "owner" : "client";
+            order.messages.push({ sender, text, time: time() });
+            save();
+            input.value = "";
+            renderChat();
+            renderOwnerOrders();
+            if (clientEmail === order.email) { renderClientProjects();
+                updateClientStats(); }
+            if (sender === "client" && !ownerLogged) {
+                showTyping();
+                clearTimeout(typingTimeout);
+                typingTimeout = setTimeout(() => {
+                    hideTyping();
+                    const replies = [
+                        "Thanks! I'll review it shortly.",
+                        "Great! Let me look into that.",
+                        "Perfect! I'll get back to you soon.",
+                        "Understood! I'll keep you updated."
+                    ];
+                    const reply = replies[Math.floor(Math.random() * replies.length)];
+                    order.messages.push({ sender: "owner", text: reply, time: time() });
+                    save();
+                    renderChat();
+                    renderOwnerOrders();
+                    if (clientEmail === order.email) { renderClientProjects();
+                        updateClientStats(); }
+                    toast("Owner replied!", "info", 2000);
+                }, 1200 + Math.random() * 1800);
+            }
+        }
+
+        /* ============================================================
+           HELPERS
+           ============================================================ */
+        function getProgress(status) { return { 1: 25, 2: 50, 3: 75, 4: 100 } [status] || 0; }
+
+        function statusText(status) { return { 1: "Order Received", 2: "Discussion", 3: "Building", 4: "Completed" } [
+            status] || "Unknown"; }
+
+        function progressCard(name, stage, current) {
+            const active = current >= stage;
+            return `
+            <div class="p-4 rounded-xl ${active ? 'bg-green-500/10 border border-green-500/20' : 'bg-white/[.02] border border-white/5'}">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg flex items-center justify-center ${active ? 'bg-green-500 text-black' : 'bg-white/10 text-gray-600'}">
+                  ${active ? '✓' : stage}
+                </div>
+                <span class="text-sm ${active ? 'text-green-300' : 'text-gray-600'}">${name}</span>
+              </div>
+            </div>
+          `;
+        }
+
+        function restoreSessions() {
+            const owner = localStorage.getItem("novaforge_owner") === "true";
+            const client = JSON.parse(localStorage.getItem("novaforge_client") || "null");
+            if (owner) {
+                const login = document.getElementById("ownerLoginModal");
+                login.classList.add("hide");
+                login.style.display = "none";
+                document.getElementById("ownerPortal").classList.remove("hide");
+                renderOwner();
+            }
+            if (client) {
+                clientEmail = client.email;
+                updateNavForClient(client.name);
+            }
+        }
+
+        function time() { return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+
+        function safe(v) { return String(v ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(
+                /"/g, "&quot;").replace(/'/g, "&#039;"); }
+
+        function safeAttr(v) { return String(v ?? "").replace(/"/g, "%22").replace(/'/g, "%27"); }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                document.querySelectorAll(".modal-bg:not(.hide)").forEach(el => {
+                    const id = el.id;
+                    if (id && id.endsWith("Modal")) closeModal(id);
+                });
+                if (!document.getElementById("chatWindow").classList.contains("hide")) closeChat();
+            }
+            if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                const input = document.getElementById("chatInput");
+                if (document.activeElement === input) { e.preventDefault();
+                    sendMessage(); }
+            }
+        });
+
+        window.addEventListener("beforeunload", () => save());
+
+        console.log("🚀 NovaForge Studio — Dark Theme + My Orders button");
+        console.log("📦 Orders:", orders.length);
+        console.log("👥 Users:", users.length);
+        console.log("🔑 Owner: owner@gmail.com / Owner@123");
+    </script>
+</body>
+</html>
